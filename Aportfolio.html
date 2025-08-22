@@ -1,0 +1,337 @@
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Mail, Phone, Github, Linkedin, Link as LinkIcon, ArrowDown, ExternalLink, Moon, Sun, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
+
+// 🔧 QUICK START — PERSONALIZE THESE VALUES
+const ME = {
+  name: "Deep Singh",
+  title: "B.C.A. Student • Developer",
+  subtitle: "I build clean, fast, and user‑friendly web & mobile apps.",
+  location: "Ludhiana, Punjab",
+  email: "deepsingh03533@gmail.com", // ← change if you want
+  phone: "9779691122", // ← optional, remove if you prefer privacy
+  socials: {
+    github: "https://github.com/", // ← add your handle
+    linkedin: "https://www.linkedin.com/in/deep-singh-bb108b250/",
+    portfolio: "#", // can point to another site later
+  },
+  resumeUrl: "#", // link a PDF in /public or any URL
+  skills: [
+    "Java", "C++", "Python", "SQL", "HTML", "CSS", "JavaScript",
+    "React Native", "Expo", "MySQL", "DBMS", "Problem Solving",
+  ],
+};
+
+const PROJECTS = [
+  {
+    name: "Exam Paper Generator & Mock Tests",
+    desc: "PHP-based tri‑panel system (Admin/Teacher/Student) with automatic paper generation and scoring.",
+    stack: ["PHP", "MySQL", "Bootstrap"],
+    link: "#",
+  },
+  {
+    name: "Pet Selling Website",
+    desc: "Product-style listing + detail pages with search & filters; built using HTML/CSS/PHP/SQL.",
+    stack: ["HTML", "CSS", "PHP", "SQL"],
+    link: "#",
+  },
+  {
+    name: "Smart Health Monitoring (Concept)",
+    desc: "Wearable integration + anomaly detection (ML) with Flask API & secure storage.",
+    stack: ["Python", "Flask", "TensorFlow", "MySQL"],
+    link: "#",
+  },
+  {
+    name: "React Native Mobile UI",
+    desc: "Modern mobile screens using Expo SDK with reusable components and responsive design.",
+    stack: ["React Native", "Expo"],
+    link: "#",
+  },
+];
+
+const EXPERIENCE = [
+  {
+    role: "Customer Care Executive (Email)",
+    company: "Netplus Broadband",
+    period: "Jul 2024 – Present",
+    points: [
+      "Handled customer email support with SLA adherence and clear documentation.",
+      "Collaborated with phone support team to reduce repeat tickets.",
+    ],
+  },
+  {
+    role: "Customer Care Executive (Phone)",
+    company: "Netplus Broadband",
+    period: "Feb 2024 – Jul 2024",
+    points: [
+      "Resolved real‑time customer issues and improved first‑call resolution.",
+    ],
+  },
+  {
+    role: "C++ Intern",
+    company: "Topperworld",
+    period: "Oct 2023 – Dec 2023",
+    points: ["Built small utilities and practiced OOP, STL, and debugging best practices."],
+  },
+];
+
+export default function PortfolioPage() {
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (dark) root.classList.add("dark");
+    else root.classList.remove("dark");
+  }, [dark]);
+
+  const smoothScroll = (e, id) => {
+    e.preventDefault();
+    document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const nowYear = useMemo(() => new Date().getFullYear(), []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 text-foreground">
+      {/* NAVBAR */}
+      <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <a href="#home" onClick={(e)=>smoothScroll(e, '#home')} className="font-bold text-lg">{ME.name}</a>
+          <nav className="hidden sm:flex gap-6 text-sm">
+            {[
+              ["About", "#about"],
+              ["Skills", "#skills"],
+              ["Projects", "#projects"],
+              ["Experience", "#experience"],
+              ["Contact", "#contact"],
+            ].map(([label, href]) => (
+              <a key={label} href={href} onClick={(e)=>smoothScroll(e, href)} className="hover:opacity-80">
+                {label}
+              </a>
+            ))}
+          </nav>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" className="rounded-2xl" onClick={()=>setDark(d=>!d)} aria-label="Toggle theme">
+              {dark ? <Sun className="h-4 w-4"/> : <Moon className="h-4 w-4"/>}
+            </Button>
+            <a href={ME.resumeUrl} target="_blank" rel="noreferrer">
+              <Button className="rounded-2xl">Resume</Button>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section id="home" className="max-w-6xl mx-auto px-4 pt-16 pb-24">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 border text-xs">
+              <MapPin className="h-3.5 w-3.5" /> {ME.location}
+            </div>
+            <h1 className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
+              {ME.title}
+            </h1>
+            <p className="mt-3 text-muted-foreground max-w-prose">
+              {ME.subtitle}
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href="#projects" onClick={(e)=>smoothScroll(e, '#projects')}>
+                <Button className="rounded-2xl">See Projects</Button>
+              </a>
+              <a href="#contact" onClick={(e)=>smoothScroll(e, '#contact')}>
+                <Button variant="outline" className="rounded-2xl">Contact Me</Button>
+              </a>
+            </div>
+            <div className="mt-10 flex items-center gap-4 text-sm">
+              <a href={`mailto:${ME.email}`} className="inline-flex items-center gap-2 hover:underline"><Mail className="h-4 w-4"/> {ME.email}</a>
+              <span className="opacity-50">•</span>
+              <span className="inline-flex items-center gap-2"><Phone className="h-4 w-4"/> {ME.phone}</span>
+            </div>
+            <div className="mt-4 flex items-center gap-4">
+              <SocialLink href={ME.socials.github} label="GitHub"><Github className="h-5 w-5"/></SocialLink>
+              <SocialLink href={ME.socials.linkedin} label="LinkedIn"><Linkedin className="h-5 w-5"/></SocialLink>
+              <SocialLink href={ME.socials.portfolio} label="More"><LinkIcon className="h-5 w-5"/></SocialLink>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="relative">
+            <div className="aspect-[4/3] rounded-3xl border overflow-hidden shadow-xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent">
+              {/* Replace with your own image in /public and use an <img> tag if preferred */}
+              <div className="h-full w-full grid place-items-center">
+                <span className="text-muted-foreground">Your photo / illustration here</span>
+              </div>
+            </div>
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
+              className="absolute -bottom-4 -right-4 hidden md:flex items-center gap-2 rounded-2xl border bg-background px-3 py-2 shadow">
+              <ArrowDown className="h-4 w-4"/>
+              <span className="text-xs">Scroll for more</span>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <Section id="about" title="About">
+        <p>
+          I’m a B.C.A. student graduating in 2025, with hands‑on experience building web and mobile
+          projects end‑to‑end. I care about clean UI, reliable backends, and writing code that is easy
+          to maintain. Currently exploring systems design, React Native patterns, and PHP/MySQL stacks
+          for pragmatic products.
+        </p>
+      </Section>
+
+      {/* SKILLS */}
+      <Section id="skills" title="Skills">
+        <div className="flex flex-wrap gap-2">
+          {ME.skills.map((s) => (
+            <Badge key={s} variant="secondary" className="px-3 py-1 rounded-2xl text-sm">{s}</Badge>
+          ))}
+        </div>
+      </Section>
+
+      {/* PROJECTS */}
+      <Section id="projects" title="Projects">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {PROJECTS.map((p) => (
+            <Card key={p.name} className="rounded-2xl hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">{p.name}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-muted-foreground">{p.desc}</p>
+                <div className="flex flex-wrap gap-2">
+                  {p.stack.map((t) => (
+                    <Badge key={t} variant="outline" className="rounded-xl">{t}</Badge>
+                  ))}
+                </div>
+                <div className="pt-1">
+                  <a className="inline-flex items-center gap-2 text-sm hover:underline" href={p.link} target="_blank" rel="noreferrer">
+                    <ExternalLink className="h-4 w-4"/> View
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      {/* EXPERIENCE */}
+      <Section id="experience" title="Experience">
+        <div className="grid gap-4">
+          {EXPERIENCE.map((job) => (
+            <Card key={job.role+job.company} className="rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-lg flex flex-wrap items-baseline gap-2">
+                  <span>{job.role}</span>
+                  <span className="text-muted-foreground">@ {job.company}</span>
+                  <span className="ml-auto text-xs opacity-70">{job.period}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 text-sm space-y-1">
+                  {job.points.map((pt, i) => <li key={i}>{pt}</li>)}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      {/* CONTACT */}
+      <Section id="contact" title="Contact">
+        <div className="grid md:grid-cols-2 gap-6 items-start">
+          <div className="space-y-4">
+            <p className="text-muted-foreground">
+              Want to collaborate or hire me? Drop a message — I’ll get back within 24 hours.
+            </p>
+            <div className="space-y-3 text-sm">
+              <a className="inline-flex items-center gap-2 hover:underline" href={`mailto:${ME.email}`}><Mail className="h-4 w-4"/> {ME.email}</a>
+              <div className="inline-flex items-center gap-2"><Phone className="h-4 w-4"/> {ME.phone}</div>
+              <div className="flex gap-3 pt-1">
+                <SocialLink href={ME.socials.github} label="GitHub"><Github className="h-5 w-5"/></SocialLink>
+                <SocialLink href={ME.socials.linkedin} label="LinkedIn"><Linkedin className="h-5 w-5"/></SocialLink>
+              </div>
+            </div>
+          </div>
+          <ContactForm/>
+        </div>
+      </Section>
+
+      {/* FOOTER */}
+      <footer className="mt-16 border-t">
+        <div className="max-w-6xl mx-auto px-4 py-10 text-sm flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div className="opacity-70">© {nowYear} {ME.name}. All rights reserved.</div>
+          <div className="flex gap-4">
+            <a href="#home" onClick={(e)=>smoothScroll(e, '#home')} className="hover:underline">Back to top</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function Section({ id, title, children }) {
+  return (
+    <section id={id} className="max-w-6xl mx-auto px-4 py-14">
+      <motion.h2 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+        className="text-2xl md:text-3xl font-bold mb-6">
+        {title}
+      </motion.h2>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.05 }}>
+        {children}
+      </motion.div>
+    </section>
+  );
+}
+
+function SocialLink({ href, label, children }) {
+  if (!href || href === "#") return (
+    <span className="inline-flex items-center gap-2 opacity-50 cursor-not-allowed" title="Add your link in code">
+      {children}<span className="text-xs">{label}</span>
+    </span>
+  );
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:opacity-80">
+      {children}<span className="text-xs">{label}</span>
+    </a>
+  );
+}
+
+function ContactForm() {
+  const [status, setStatus] = useState("");
+
+  // NOTE: This is a front‑end demo. To make it work, connect to an API or service (e.g., EmailJS, Formspree, a custom server route, etc.).
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setStatus("Submitted! (Demo — connect to your backend to receive emails.)");
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="rounded-2xl border p-4 md:p-6 shadow-sm bg-background space-y-3">
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label className="text-sm">Name</label>
+          <Input required placeholder="Your name"/>
+        </div>
+        <div>
+          <label className="text-sm">Email</label>
+          <Input required type="email" placeholder="you@example.com"/>
+        </div>
+      </div>
+      <div>
+        <label className="text-sm">Message</label>
+        <Textarea required placeholder="Tell me about your project…" rows={5}/>
+      </div>
+      <div className="flex items-center justify-between pt-2">
+        <Button type="submit" className="rounded-2xl">Send</Button>
+        <span className="text-xs text-muted-foreground">{status}</span>
+      </div>
+    </form>
+  );
+}
+
